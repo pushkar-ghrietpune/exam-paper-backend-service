@@ -1,0 +1,6 @@
+com\exam\repository\BoardRepository.class
+com\exam\controller\SubjectController.class
+com\exam\entity\Board.class
+com\exam\ExamPaperApplication.class
+com\exam\service\BoardService.class
+com\exam\controller\BoardController.class
