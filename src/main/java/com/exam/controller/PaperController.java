@@ -10,7 +10,7 @@ import org.springframework.core.io.Resource;
 import java.util.List;
 
 @RestController
-@RequestMapping("/papers")
+@RequestMapping("/static/papers")
 public class PaperController {
 
     @Autowired
