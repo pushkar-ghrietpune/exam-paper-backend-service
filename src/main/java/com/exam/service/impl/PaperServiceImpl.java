@@ -65,7 +65,7 @@ public class PaperServiceImpl
 
         Resource resource =
                 new ClassPathResource(
-                        "static/papers/" + paper.getPdfFileName());
+                        "papers/" + paper.getPdfFileName());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
@@ -83,7 +83,7 @@ public class PaperServiceImpl
 
         Resource resource =
                 new ClassPathResource(
-                        "static/papers/" + paper.getPdfFileName());
+                        "papers/" + paper.getPdfFileName());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
