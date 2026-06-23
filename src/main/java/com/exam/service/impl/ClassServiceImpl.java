@@ -20,7 +20,7 @@ public class ClassServiceImpl implements ClassService {
     public List<ClassResponseDTO> getClasses() {
 
         List<ClassEntity> classes =
-                classRepository.findAll();
+                classRepository.findAllByOrderByDisplayOrderAsc();
 
         List<ClassResponseDTO> response =
                 new ArrayList<>();

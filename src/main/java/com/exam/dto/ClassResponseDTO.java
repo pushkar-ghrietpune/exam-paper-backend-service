@@ -4,6 +4,7 @@ public class ClassResponseDTO {
 
     private Long id;
     private String name;
+    private Integer displayOrder;
 
     public ClassResponseDTO() {
     }
@@ -29,5 +30,13 @@ public class ClassResponseDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(Integer displayOrder) {
+        this.displayOrder = displayOrder;
     }
 }

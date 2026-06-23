@@ -2,6 +2,7 @@ package com.exam.service.impl;
 
 import com.exam.dto.PaperResponseDTO;
 import com.exam.entity.Paper;
+import com.exam.exception.PaperNotFoundException;
 import com.exam.repository.PaperRepository;
 import com.exam.service.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,9 @@ public class PaperServiceImpl
 
         Paper paper =
                 paperRepository.findById(paperId)
-                        .orElseThrow();
+                        .orElseThrow(() ->
+                                new PaperNotFoundException(
+                                        "Paper not found with id : " + paperId));
 
         Resource resource =
                 new ClassPathResource(
@@ -79,7 +82,9 @@ public class PaperServiceImpl
 
         Paper paper =
                 paperRepository.findById(paperId)
-                        .orElseThrow();
+                        .orElseThrow(() ->
+                                new PaperNotFoundException(
+                                        "Paper not found with id : " + paperId));
 
         Resource resource =
                 new ClassPathResource(

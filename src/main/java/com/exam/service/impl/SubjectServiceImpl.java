@@ -3,6 +3,8 @@ package com.exam.service.impl;
 import com.exam.dto.SubjectResponseDTO;
 import com.exam.entity.Paper;
 import com.exam.entity.Subject;
+import com.exam.exception.ClasNotFoundException;
+import com.exam.repository.ClassRepository;
 import com.exam.repository.PaperRepository;
 import com.exam.repository.SubjectRepository;
 import com.exam.service.SubjectService;
@@ -19,6 +21,8 @@ public class SubjectServiceImpl implements SubjectService {
     private SubjectRepository subjectRepository;
     @Autowired
     private PaperRepository paperRepository;
+    @Autowired
+    private ClassRepository classRepository;
 
     @Override
     public List<SubjectResponseDTO> getSubjects() {
@@ -43,6 +47,12 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public List<SubjectResponseDTO> getSubjects(Long classId) {
+
+        classRepository.findById(classId)
+                .orElseThrow(() ->
+                        new ClasNotFoundException(
+                                "Class not found with id : " + classId));
+
 
         List<Subject> subjects = subjectRepository.findByClassEntityId(classId);
 

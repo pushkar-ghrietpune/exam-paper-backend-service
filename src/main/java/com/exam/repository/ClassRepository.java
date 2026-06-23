@@ -11,5 +11,6 @@ public interface ClassRepository
         extends JpaRepository<ClassEntity, Long> {
 
     List<ClassEntity> findAll();
+    List<ClassEntity> findAllByOrderByDisplayOrderAsc();
 
 }
