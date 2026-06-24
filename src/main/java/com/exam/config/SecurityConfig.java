@@ -89,7 +89,7 @@ public class SecurityConfig {
 
                         "http://localhost:5173",
 
-                        "https://exam-paper-frontend.vercel.app"
+                        "https://papers-profuz.vercel.app"
 
                 ));
 
