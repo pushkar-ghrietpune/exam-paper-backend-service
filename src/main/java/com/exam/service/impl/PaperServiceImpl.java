@@ -6,6 +6,8 @@ import com.exam.exception.PaperNotFoundException;
 import com.exam.repository.PaperRepository;
 import com.exam.service.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
 import org.springframework.core.io.ClassPathResource;
@@ -14,6 +16,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +28,8 @@ public class PaperServiceImpl
 
     @Autowired
     private PaperRepository paperRepository;
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @Override
     public List<PaperResponseDTO> getPapers(
@@ -58,24 +65,67 @@ public class PaperServiceImpl
     }
 
     @Override
-    public ResponseEntity<Resource> viewPaper(Long paperId) {
+    public ResponseEntity viewPaper(
+            Long paperId) {
 
         Paper paper =
-                paperRepository.findById(paperId)
-                        .orElseThrow(() ->
-                                new PaperNotFoundException(
-                                        "Paper not found with id : " + paperId));
+                paperRepository.findById(
+                                paperId)
 
-        Resource resource =
-                new ClassPathResource(
-                        "papers/" + paper.getPdfFileName());
+                        .orElseThrow(
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "inline; filename=\"" +
-                                paper.getPdfFileName() + "\"")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(resource);
+                                () -> new PaperNotFoundException(
+
+                                        "Paper not found with id : "
+                                                + paperId));
+
+        try {
+
+            Path path =
+                    Paths.get(
+                            uploadDir,
+                            paper.getPdfFileName());
+
+            Resource resource =
+                    new UrlResource(
+                            path.toUri());
+
+            if (
+                    !resource.exists()
+            ) {
+
+                throw new RuntimeException(
+                        "PDF file not found");
+
+            }
+
+            return ResponseEntity.ok()
+
+                    .header(
+                            HttpHeaders.CONTENT_DISPOSITION,
+
+                            "inline; filename=\""
+                                    +
+                                    paper.getPdfFileName()
+                                    +
+                                    "\"")
+
+                    .contentType(
+                            MediaType.APPLICATION_PDF)
+
+                    .body(
+                            resource);
+
+        }
+
+        catch (MalformedURLException e) {
+
+            throw new RuntimeException(
+                    "Unable to load PDF",
+                    e);
+
+        }
+
     }
     @Override
     public ResponseEntity<Resource> downloadPaper(Long paperId) {
