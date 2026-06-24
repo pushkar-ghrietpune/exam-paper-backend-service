@@ -52,8 +52,7 @@ public class SecurityConfig {
 
                         auth -> auth
 
-                                .requestMatchers(
-                                        "/auth/**")
+                                .requestMatchers("/admin/auth/**")
                                 .permitAll()
 
                                 .requestMatchers(
