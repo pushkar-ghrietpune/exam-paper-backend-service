@@ -1,5 +1,6 @@
 package com.exam.config;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -21,6 +22,14 @@ public class WebConfig
 
                 .addResourceLocations(
                         "file:" + uploadDir + "/");
+
+    }
+
+    @PostConstruct
+    public void init() {
+
+        System.out.println(
+                "UPLOAD DIR = " + uploadDir);
 
     }
 
