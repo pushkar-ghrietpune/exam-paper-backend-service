@@ -13,7 +13,7 @@ public class PasswordGenerator {
 
                 encoder.encode(
 
-                        "admin");
+                        "Profuz@2026");
 
         System.out.println(
 

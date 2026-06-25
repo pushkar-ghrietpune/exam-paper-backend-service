@@ -99,6 +99,19 @@ public class PaperServiceImpl
 
             }
 
+            System.out.println(
+                    "uploadDir = " + uploadDir);
+
+            System.out.println(
+                    "pdfFileName = " + paper.getPdfFileName());
+
+            System.out.println(
+                    "Full Path = "
+                            + Paths.get(
+                                    uploadDir,
+                                    paper.getPdfFileName())
+                            .toAbsolutePath());
+
             return ResponseEntity.ok()
 
                     .header(
@@ -130,22 +143,57 @@ public class PaperServiceImpl
     @Override
     public ResponseEntity<Resource> downloadPaper(Long paperId) {
 
+
         Paper paper =
                 paperRepository.findById(paperId)
                         .orElseThrow(() ->
                                 new PaperNotFoundException(
                                         "Paper not found with id : " + paperId));
 
-        Resource resource =
-                new ClassPathResource(
-                        "papers/" + paper.getPdfFileName());
+        try {
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" +
-                                paper.getPdfFileName() + "\"")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(resource);
+            Path path =
+                    Paths.get(
+                            uploadDir,
+                            paper.getPdfFileName());
+
+            Resource resource =
+                    new UrlResource(
+                            path.toUri());
+
+            if (!resource.exists()) {
+
+                throw new RuntimeException(
+                        "PDF file not found : "
+                                + path.toAbsolutePath());
+
+            }
+
+            return ResponseEntity.ok()
+
+                    .header(
+                            HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\""
+                                    + paper.getPdfFileName()
+                                    + "\"")
+
+                    .contentType(
+                            MediaType.APPLICATION_PDF)
+
+                    .body(
+                            resource);
+
+        }
+
+        catch (MalformedURLException e) {
+
+            throw new RuntimeException(
+                    "Unable to load PDF",
+                    e);
+
+        }
+
+
     }
 
 }
